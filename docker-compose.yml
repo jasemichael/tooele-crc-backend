@@ -12,6 +12,8 @@ services:
     depends_on:
       - db
     env_file: .env.development
+    profiles:
+      - "dev"
   db:
     container_name: tooele-crc-mongo
     image: mongo
@@ -24,6 +26,22 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: tooele-crc
+    profiles:
+      - "dev"
+  test-web:
+    container_name: tooele-crc-test
+    build: 
+      context: .
+      target: test
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - test-db
+    env_file: .env.staging
+    profiles:
+      - "test"
   test-db:
     container_name: tooele-crc-test-mongo
     image: mongo
@@ -33,6 +51,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: tooele-crc
+    profiles:
+      - "test"
     
 volumes:
   db-data:

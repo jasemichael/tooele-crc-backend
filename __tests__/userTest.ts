@@ -5,8 +5,8 @@ describe('userTest', () => {
     beforeAll(() => {
 
     })
-    it('retreives all users', () => {
-      request(server).get('/users').expect([])
+    it('retreives all users', async () => {
+      await request(server).get('/users').expect({})
     })
   })
 })
